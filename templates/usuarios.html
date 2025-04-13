@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block body %}
+        <div class = 'container'>
+            <br>
+            <h1>Usuários</h1>
+            <hr>
+            {% for usuario in lista_usuarios%}
+                <p>{{ usuario }}</p>
+                <hr>
+            {% endfor %}
+
+        </div>
+{% endblock %}
