@@ -14,6 +14,15 @@
 
         {% include 'navbar.html' %}
 
+        {% with mensagens = get_flashed_messages(with_categories=True) %}
+            {% if mensagens %}
+                {% for categoria,mensagem in mensagens %}
+                    <div class='alert {{ categoria }} container'>
+                    {{ mensagem }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {%endwith%}
 
 
         {% block body %}
