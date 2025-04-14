@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template
 from forms import FormLogin, FormCriarConta
 import os
 
@@ -21,7 +21,7 @@ def contato():
 def usuarios():
     return render_template('usuarios.html', lista_usuarios = lista_usuarios)
 
-@app.route('/login')
+@app.route('/login', methods=["GET","POST"])
 def login():
     form_login = FormLogin()
     form_criarconta = FormCriarConta()
