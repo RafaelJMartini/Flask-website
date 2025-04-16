@@ -2,7 +2,7 @@ from comunidadeimpressionadora import app,database, bcrypt
 from comunidadeimpressionadora.forms import FormLogin, FormCriarConta
 from comunidadeimpressionadora.models import Usuario
 from flask import render_template, redirect, url_for,flash,request
-
+from flask_login import login_user
 
 lista_usuarios = ['Rafael','João','Martini','Ronaldo']
 
@@ -28,13 +28,17 @@ def login():
     form_criarconta = FormCriarConta()
 
     if form_login.validate_on_submit() and 'botao_submit_login' in request.form:
-        #Fez login com sucesso
-        flash(f'Login feito com sucesso no e-mail {form_login.email.data}', 'alert-success')
-        return redirect(url_for('home'))
-        #enviar msg e redirecionar
+        usuario = Usuario.query.filter_by(email=form_login.email.data).first()
+        if usuario and bcrypt.check_password_hash(usuario.senha, form_login.senha.data): # Checa se existe um usuário com esse e-mail e se a senha é a mesma que está no banco
+            login_user(usuario, remember=form_login.lembrar_dados.data)
+            flash(f'Login feito com sucesso no e-mail {form_login.email.data}', 'alert-success')
+            return redirect(url_for('home'))
+        else:
+            flash(f'Falha no login! E-mail ou senha incorretos.', 'alert-danger')
+
+
 
     if form_criarconta.validate_on_submit() and 'botao_submit_criarconta' in request.form:
-
         senha_cript = bcrypt.generate_password_hash(form_criarconta.senha.data)
         user = Usuario(username=form_criarconta.username.data, email=form_criarconta.email.data, senha=senha_cript)
         database.session.add(user)
