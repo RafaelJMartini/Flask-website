@@ -1,4 +1,4 @@
-from comunidadeimpressionadora import app,database
+from comunidadeimpressionadora import app,database, bcrypt
 from comunidadeimpressionadora.forms import FormLogin, FormCriarConta
 from comunidadeimpressionadora.models import Usuario
 from flask import render_template, redirect, url_for,flash,request
@@ -6,9 +6,11 @@ from flask import render_template, redirect, url_for,flash,request
 
 lista_usuarios = ['Rafael','João','Martini','Ronaldo']
 
+
 @app.route('/')
 def home():
     return render_template('home.html')
+
 
 @app.route('/contato')
 def contato():
@@ -18,6 +20,7 @@ def contato():
 @app.route('/usuarios')
 def usuarios():
     return render_template('usuarios.html', lista_usuarios = lista_usuarios)
+
 
 @app.route('/login', methods=["GET","POST"])
 def login():
@@ -29,10 +32,14 @@ def login():
         flash(f'Login feito com sucesso no e-mail {form_login.email.data}', 'alert-success')
         return redirect(url_for('home'))
         #enviar msg e redirecionar
+
     if form_criarconta.validate_on_submit() and 'botao_submit_criarconta' in request.form:
-        user = Usuario(username=form_criarconta.username.data, email=form_criarconta.email.data, senha=form_criarconta.senha.data)
+
+        senha_cript = bcrypt.generate_password_hash(form_criarconta.senha.data)
+        user = Usuario(username=form_criarconta.username.data, email=form_criarconta.email.data, senha=senha_cript)
         database.session.add(user)
         database.session.commit()
         flash(f"Conta criada com sucesso no e-mail {form_criarconta.email.data}", 'alert-success')
         return redirect(url_for('home'))
+
     return render_template('login.html',form_login = form_login,form_criarconta = form_criarconta)
