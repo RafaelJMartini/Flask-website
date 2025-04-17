@@ -1,4 +1,4 @@
 ../.venv/
 comunidadeimpressionadora/.env
 .idea/
-tests.py
+comunidadeimpressionadora/tests.py
