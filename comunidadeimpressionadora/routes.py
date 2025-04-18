@@ -33,7 +33,11 @@ def login():
         if usuario and bcrypt.check_password_hash(usuario.senha, form_login.senha.data): # Checa se existe um usuário com esse e-mail e se a senha é a mesma que está no banco
             login_user(usuario, remember=form_login.lembrar_dados.data)
             flash(f'Login feito com sucesso no e-mail {form_login.email.data}', 'alert-success')
-            return redirect(url_for('home'))
+            par_next = request.args.get('next')
+            if par_next:
+                return redirect(par_next)
+            else:
+                return redirect(url_for('home'))
         else:
             flash(f'Falha no login! E-mail ou senha incorretos.', 'alert-danger')
 
