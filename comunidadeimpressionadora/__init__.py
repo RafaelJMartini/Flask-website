@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), 'templates'))
 
 load_dotenv()
 app.config['SECRET_KEY'] = os.getenv('KEY')
