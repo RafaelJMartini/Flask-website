@@ -1,10 +1,12 @@
 from fileinput import filename
-
 from comunidadeimpressionadora import app,database, bcrypt
 from comunidadeimpressionadora.forms import FormLogin, FormCriarConta, FormEditarPerfil
 from comunidadeimpressionadora.models import Usuario
 from flask import render_template, redirect, url_for,flash,request
 from flask_login import login_user, logout_user, current_user, login_required
+import secrets
+import os
+from PIL import Image
 
 lista_usuarios = ['Rafael','João','Martini','Ronaldo']
 
@@ -76,6 +78,19 @@ def perfil():
 def criar_post():
     return render_template('criarpost.html')
 
+
+def salvar_imagem(imagem):
+    codigo = secrets.token_hex(8)
+    nome, extensao = os.path.splitext(imagem.filename)
+    nome_arquivo = nome + codigo + extensao
+    caminho_completo = os.path.join(app.root_path, 'static/fotos_perfil', nome_arquivo)
+
+    tamanho = (200,200)
+    imagem_reduzida = Image.open(imagem)
+    imagem_reduzida.thumbnail(tamanho)
+    imagem_reduzida.save(caminho_completo)
+    return nome_arquivo
+
 @app.route('/perfil/editar', methods=["GET","POST"])
 @login_required
 def editar_perfil():
@@ -83,8 +98,11 @@ def editar_perfil():
     if form.validate_on_submit():
         current_user.email = form.email.data
         current_user.username = form.username.data
+        if form.foto_perfil.data:
+            nome_imagem = salvar_imagem(form.foto_perfil.data)
+            current_user.profile_pic = nome_imagem
         database.session.commit()
-        flash('Pefil atualizado com sucesso!', 'alert-success')
+        flash('Perfil atualizado com sucesso!', 'alert-success')
         return redirect(url_for('perfil'))
     elif request.method == 'GET':
         form.email.data = current_user.email
