@@ -8,7 +8,6 @@ import secrets
 import os
 from PIL import Image
 
-lista_usuarios = ['Rafael','João','Martini','Ronaldo']
 
 
 @app.route('/')
@@ -24,6 +23,7 @@ def contato():
 @app.route('/usuarios')
 @login_required
 def usuarios():
+    lista_usuarios = Usuario.query.all()
     return render_template('usuarios.html', lista_usuarios = lista_usuarios)
 
 
@@ -69,7 +69,7 @@ def sair():
 @app.route('/perfil')
 @login_required
 def perfil():
-    foto_perfil = url_for('static',filename='fotos_perfil/{}'.format(current_user.profile_pic)    )
+    foto_perfil = url_for('static',filename='fotos_perfil/{}'.format(current_user.profile_pic))
     return render_template('perfil.html',foto_perfil = foto_perfil)
 
 
