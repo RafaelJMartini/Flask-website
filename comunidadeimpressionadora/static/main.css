@@ -1,6 +1,6 @@
 body{
 
-    background-color: #B3E5FC;
+    background-color: #ffffff;
     border-radius: 10px;
 
 }
@@ -43,4 +43,8 @@ body{
 }
 .number3{
   font-weight:500;
+}
+
+.meupost {
+    background: #cccccc !important;
 }
