@@ -15,7 +15,9 @@
 
                         <div class="col" style="text-align: center">
                             {% for curso in post.autor.cursos.split(';') %}
+                                {% if curso %}
                                 <button type="button" class="btn btn-success mt-2" disabled>{{ curso }}</button>
+                                {% endif %}
                             {% endfor %}
                         </div>
                 </div>
