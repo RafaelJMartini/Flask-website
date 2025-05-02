@@ -20,7 +20,14 @@
 
 
                 <div class="col col-8">
-                    <h3>{{ post.titulo }}</h3>
+                    <h3>{{ post.titulo }}
+                        <small class="text-muted" style="font-size: 14px">
+                            {{ post.data_criacao.strftime('%d/%m/%Y %H:%M') }}
+                            {% if form %}
+                                - <a href="#form_editarpost">Editar Post</a> / <a href='#' data-bs-toggle="modal" data-bs-target="#ExcluirPost">Excluir Post</a>
+                            {% endif %}
+                        </small>
+                    </h3>
                     <p>{{ post.corpo }}</p>
                     <p>{{ post.id_usuario.nome }}</p>
                 </div>
@@ -33,7 +40,7 @@
        <div class = 'container '>
             <div class="row">
                 <div class=" col">
-                    <form method="POST" action="" class="p-4 mt-2">
+                    <form method="POST" action="" id="form_editarpost" class="p-4 mt-2">
                         {{ form.csrf_token }}
                         <legend>Editar Post</legend>
                             <fieldset>
@@ -71,4 +78,31 @@
             </div>
         </div>
     {% endif %}
+
+
+
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ExcluirPost">
+      Launch demo modal
+    </button>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="ExcluirPost" tabindex="-1" aria-labelledby="ExcluirPostLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="ExcluirPostLabel">Deseja excluir o post?</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Você tem certeza que deseja excluir o post?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary">Excluir post</button>
+          </div>
+        </div>
+      </div>
+    </div>
 {% endblock %}
