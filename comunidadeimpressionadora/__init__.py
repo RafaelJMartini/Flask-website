@@ -9,7 +9,10 @@ app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), 't
 
 load_dotenv()
 app.config['SECRET_KEY'] = os.getenv('KEY')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///comunidade.db'
+if os.getenv('DATABASE_URL'):
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///comunidade.db'
 
 database = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
